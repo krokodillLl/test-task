@@ -19,16 +19,17 @@ public class EmployeeService {
     return employeeRepository.findAll();
     }
 
-    public boolean addEmployee(Employee employee) {
-        if(employeeRepository.findById(employee.getId()).isPresent()) {
-            return false;
+    public Employee addEmployee(Employee employee) {
+        if(employeeRepository.findByEmployeeNumber(employee.getEmployeeNumber()) != null) {
+            return null;
         }
         employeeRepository.saveAndFlush(employee);
-        return true;
+        return employee;
     }
 
-    public void updateEmployee(Employee employee) {
+    public Employee updateEmployee(Employee employee) {
         employeeRepository.saveAndFlush(employee);
+        return employee;
     }
 
     public void deleteEmployee(Long id) {

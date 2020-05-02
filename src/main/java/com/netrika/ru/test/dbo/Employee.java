@@ -11,6 +11,7 @@ public class Employee {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+    private Long employeeNumber;
     private String name;
     private String surname;
     private String patronymic;
@@ -29,6 +30,14 @@ public class Employee {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getEmployeeNumber() {
+        return employeeNumber;
+    }
+
+    public void setEmployeeNumber(Long employeeNumber) {
+        this.employeeNumber = employeeNumber;
     }
 
     public String getName() {

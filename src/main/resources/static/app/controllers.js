@@ -3,10 +3,15 @@
     Employee.query(function(response) {
       $scope.employees = response ? response : [];
     });
-    
-    $scope.addEmployee = function(id, name, surname, patronymic, position, login, password, birthday, startWork) {
+
+    $scope.selectEmployee = function(employee) {
+      $scope.selectedEmployee = employee;
+    };
+
+
+    $scope.addEmployee = function(employeeNumber, name, surname, patronymic, position, login, password, birthday, startWork) {
       new Employee({
-        id: id,
+        employeeNumber: employeeNumber,
         name: name,
         surname: surname,
         patronymic: patronymic,
@@ -18,11 +23,33 @@
       }).$add(function(employee) {
         $scope.employees.push(employee);
       });
-      $scope.id = "";
+      $scope.employeeNumber = "";
+          $scope.name = "";
+          $scope.surname = "";
+          $scope.patronymic = "";
+          $scope.position = "";
+          $scope.login = "";
+          $scope.password = "";
+          $scope.birthday = "";
+          $scope.startWork = "";
     };
     
-    $scope.updateEmployee = function(employee) {
-      employee.$update();
+    $scope.updateEmployee = function(employeeNumber, name, surname, patronymic, position, login, password, birthday, startWork, employee) {
+      $scope.employees.splice($scope.employees.indexOf(employee), 1);
+      new Employee({
+        id: employee.id,
+        employeeNumber: employeeNumber != null ? employeeNumber : employee.employeeNumber,
+        name: name != null ? name : employee.name,
+        surname: surname != null ? surname : employee.surname,
+        patronymic: patronymic != null ? patronymic : employee.patronymic,
+        position: position != null ? position : employee.position,
+        login: login != null ? login : employee.login,
+        password: password != null ? password : employee.password,
+        birthday: birthday != null ? birthday : employee.birthday,
+        startWork: startWork != null ? startWork : employee.startWork
+      }).$update(function (employee) {
+        $scope.employees.push(employee);
+      });
     };
     
     $scope.deleteEmployee = function(employee) {

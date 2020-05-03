@@ -2,78 +2,124 @@
 <html lang="ru">
 <head>
     <link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap.css" />
-    <title>График отпусков</title>
+    <title>Data Drivers</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body ng-app="test-data-drivers">
 <div class="container" ng-controller="EmployeeController">
     <div class="page-header">
-        <h1>График отпусков</h1>
+        <h1>Список сотрудников
+            <button class="btn btn-default"  data-toggle="modal" data-target=".add-new-employee"  title="Добавить нового сотрудника">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button></h1>
     </div>
     <div class="alert alert-info" role="alert" ng-hide="employees &amp;&amp; employees.length > 0">
         Здесь пока нет ни одного сотрудкина
     </div>
-        <div class="form-group" ng-repeat="employee in employees">
-            <label>
-                <div style="color: #2a6496">Номер: {{employee.employeeNumber}}; Должность: {{employee.position}}; Имя: {{employee.name}}
-                    <button class="btn btn-default" ng-click="selectEmployee(employee)" data-toggle="modal" data-target=".bd-example-modal-lg" title="Редактировать">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </button>
-                </div>
-            </label>
-        </div>
+    <ul>
+        <li ng-repeat="employee in employees">
+            <p>ФИО: {{employee.surname}} {{employee.name}} {{employee.patronymic}}
+                <button class="btn btn-default" ng-click="selectEmployee(employee)" data-toggle="modal" data-target=".edit-employee" title="Редактировать">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button></p>
+            <ul>
+                <li><p>Должность: {{employee.position}}</p></li>
+                <li><p>Номер: {{employee.employeeNumber}}</p></li>
+                <li><p>Список отпусков
+                        <button class="btn btn-default" ng-click="selectEmployee(employee)" data-toggle="modal" data-target=".show-vacations" title="Показать">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </button></p></li>
+                <li><p>Дата рождения: {{employee.birthday | date: 'dd-MM-yyyy'}}</p></li>
+                <li><p>Дата начала работы: {{employee.startWork | date: 'dd-MM-yyyy'}}</p></li>
+            </ul>
+        </li>
+    </ul>
 
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade edit-employee" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <p>Вы можете изменить те поля, которые необходимо</p>
-                <div class="input-group">
-                    <input type="number" class="form-control" ng-model="employeeNumber" placeholder="Id сотрудника: {{selectedEmployee.employeeNumber}}"/>
-                    <input type="text" class="form-control" ng-model="name" placeholder="Имя сотрудника: {{selectedEmployee.name}}"/>
-                    <input type="text" class="form-control" ng-model="surname" placeholder="Фамилия сотрудника: {{selectedEmployee.surname}}"/>
-                    <input type="text" class="form-control" ng-model="patronymic"  placeholder="Отчество сотрудника: {{selectedEmployee.patronymic}}"/>
-                    <input type="text" class="form-control" ng-model="position" placeholder="Должность сотрудника: {{selectedEmployee.position}}"/>
-                    <input type="text" class="form-control" ng-model="login" placeholder="Логин сотрудника: {{selectedEmployee.login}}"/>
-                    <input type="password" class="form-control" ng-model="password" placeholder="Пароль сотрудника: {{selectedEmployee.password}}"/>
-                    <p>День рождения сотрудника (дд-мм-ггг): {{selectedEmployee.birthday | date: 'yyyy-MM-dd'}}</p>
-                    <input type="date" class="form-control" ng-model="birthday"  />
-                    <p>Дата начала работы сотрудника  (дд-мм-ггг): {{selectedEmployee.startWork | date: 'yyyy-MM-dd'}}</p>
-                    <input type="date" class="form-control" ng-model="startWork"  />
-                    <span class="input-group-btn">
+                <div class="modal-header">
+                    <h4 class="modal-title">Редактирование данных сотрудника: {{selectedEmployee.surname}} {{selectedEmployee.name}} {{selectedEmployee.patronymic}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <input type="number" class="form-control" ng-model="employeeNumber" placeholder="Id сотрудника: {{selectedEmployee.employeeNumber}}"/>
+                        <input type="text" class="form-control" ng-model="name" placeholder="Имя сотрудника: {{selectedEmployee.name}}"/>
+                        <input type="text" class="form-control" ng-model="surname" placeholder="Фамилия сотрудника: {{selectedEmployee.surname}}"/>
+                        <input type="text" class="form-control" ng-model="patronymic"  placeholder="Отчество сотрудника: {{selectedEmployee.patronymic}}"/>
+                        <input type="text" class="form-control" ng-model="position" placeholder="Должность сотрудника: {{selectedEmployee.position}}"/>
+                        <input type="text" class="form-control" ng-model="login" placeholder="Логин сотрудника: *Обратитесь к сотруднику*"/>
+                        <input type="password" class="form-control" ng-model="password" placeholder="Пароль сотрудника: *Обратитесь к сотруднику*"/>
+                        <p>День рождения сотрудника (дд-мм-ггг): {{selectedEmployee.birthday | date: 'dd-MM-yyyy'}}</p>
+                        <input type="date" class="form-control" ng-model="birthday"  />
+                        <p>Дата начала работы сотрудника  (дд-мм-ггг): {{selectedEmployee.startWork | date: 'dd-MM-yyyy'}}</p>
+                        <input type="date" class="form-control" ng-model="startWork"  />
+                        <span class="input-group-btn">
                             <button class="btn btn-default" ng-click="updateEmployee(employeeNumber, name, surname, patronymic, position, login, password, birthday, startWork, selectedEmployee)" title="Сохранить изменения">
-                              <span class="glyphicon glyphicon-ok"></span>
+                                <span class="glyphicon glyphicon-ok"></span>
                             </button>
                             <button class="pull-right btn btn-danger" type="button" title="Удалить сотрудника"
                                     ng-click="deleteEmployee(selectedEmployee)">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-        <hr />
-    <form class="form-horizontal" role="form" ng-submit="addEmployee(employeeNumber, name, surname, patronymic, position, login, password, birthday, startWork)">
-    <div class="input-group">
-            <input type="number" class="form-control" ng-model="employeeNumber" placeholder="Введите id сотрудника" />
-            <input type="text" class="form-control" ng-model="name" placeholder="Введите имя сотрудника" />
-            <input type="text" class="form-control" ng-model="surname" placeholder="Введите фамилию сотрудника" />
-            <input type="text" class="form-control" ng-model="patronymic" placeholder="Введите отчество сотрудника" />
-            <input type="text" class="form-control" ng-model="position" placeholder="Введите должность сотрудника" />
-            <input type="text" class="form-control" ng-model="login" placeholder="Введите логин сотрудника" />
-            <input type="password" class="form-control" ng-model="password" placeholder="Введите пароль сотрудника" />
-            <p>Введите день рождения сотрудника</p>
-            <input type="date" class="form-control" ng-model="birthday" />
-            <p>Введите дату начала работы сотрудника</p>
-            <input type="date" class="form-control" ng-model="startWork" />
-            <span class="input-group-btn">
+
+    <div class="modal fade add-new-employee" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Добавление нового сотрудника</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form" ng-submit="addEmployee(employeeNumber, name, surname, patronymic, position, login, password, birthday, startWork)">
+                        <div class="input-group">
+                            <input type="number" class="form-control" ng-model="employeeNumber" placeholder="Введите id сотрудника" />
+                            <input type="text" class="form-control" ng-model="name" placeholder="Введите имя сотрудника" />
+                            <input type="text" class="form-control" ng-model="surname" placeholder="Введите фамилию сотрудника" />
+                            <input type="text" class="form-control" ng-model="patronymic" placeholder="Введите отчество сотрудника" />
+                            <input type="text" class="form-control" ng-model="position" placeholder="Введите должность сотрудника" />
+                            <input type="text" class="form-control" ng-model="login" placeholder="Введите логин сотрудника" />
+                            <input type="password" class="form-control" ng-model="password" placeholder="Введите пароль сотрудника" />
+                            <p>Введите дату рождения сотрудника</p>
+                            <input type="date" class="form-control" ng-model="birthday" />
+                            <p>Введите дату начала работы сотрудника</p>
+                            <input type="date" class="form-control" ng-model="startWork" />
+                            <span class="input-group-btn">
             <button class="btn btn-default" type="submit" ng-disabled="!employeeNumber||!name||!surname||!patronymic||!position||!login||!password||!birthday||!startWork" title="Добавить">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
           </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
 
+    <div class="modal fade show-vacations" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Список отпусков сотрудника: {{selectedEmployee.surname}} {{selectedEmployee.name}} {{selectedEmployee.patronymic}}</h4>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li ng-repeat="vacation in selectedEmployee.vacations">
+                            <p>{{$index + 1}}</p>
+                            <p>Дата начала отпуска: {{vacation.startVacation | date: 'dd-MM-yyyy'}}</p>
+                            <p>Дата окончания отпуска: {{vacation.finishVacation | date: 'dd-MM-yyyy'}}</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
 </div>
 <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
 <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.min.js"></script>

@@ -21,7 +21,7 @@ public class Employee {
     private Date birthday;
     private Date startWork;
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name="vacation_id")
+    @JoinColumn(name="employee_id")
     private List<Vacation> vacations;
 
     public Long getId() {

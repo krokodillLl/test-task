@@ -1,6 +1,7 @@
 package com.netrika.ru.test.controller;
 
 import com.netrika.ru.test.dbo.Employee;
+import com.netrika.ru.test.dto.EmployeeTO;
 import com.netrika.ru.test.services.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +22,12 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Employee addEmployee(@RequestBody Employee employee) {
+    public EmployeeTO addEmployee(@RequestBody Employee employee) {
         return employeeService.addEmployee(employee);
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
-    public Employee updateEmployee(@RequestBody Employee employee, @PathVariable Long id) {
+    public EmployeeTO updateEmployee(@RequestBody Employee employee, @PathVariable Long id) {
         employee.setId(id);
         return employeeService.updateEmployee(employee);
     }

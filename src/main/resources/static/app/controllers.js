@@ -23,39 +23,50 @@
       }).$add(function(employee) {
         $scope.employees.push(employee);
       });
-      $scope.employeeNumber = "";
-          $scope.name = "";
-          $scope.surname = "";
-          $scope.patronymic = "";
-          $scope.position = "";
-          $scope.login = "";
-          $scope.password = "";
-          $scope.birthday = "";
-          $scope.startWork = "";
+      $scope.clearModels();
     };
     
     $scope.updateEmployee = function(employeeNumber, name, surname, patronymic, position, login, password, birthday, startWork, employee) {
       $scope.employees.splice($scope.employees.indexOf(employee), 1);
       new Employee({
         id: employee.id,
-        employeeNumber: employeeNumber != null ? employeeNumber : employee.employeeNumber,
-        name: name != null ? name : employee.name,
-        surname: surname != null ? surname : employee.surname,
-        patronymic: patronymic != null ? patronymic : employee.patronymic,
-        position: position != null ? position : employee.position,
-        login: login != null ? login : employee.login,
-        password: password != null ? password : employee.password,
-        birthday: birthday != null ? birthday : employee.birthday,
-        startWork: startWork != null ? startWork : employee.startWork
+        employeeNumber: $scope.helpForUpdate(employeeNumber) ? employeeNumber : employee.employeeNumber,
+        name:  $scope.helpForUpdate(employeeNumber) ? name : employee.name,
+        surname:  $scope.helpForUpdate(employeeNumber) ? surname : employee.surname,
+        patronymic:  $scope.helpForUpdate(employeeNumber) ? patronymic : employee.patronymic,
+        position:  $scope.helpForUpdate(employeeNumber) ? position : employee.position,
+        login: login,
+        password: password,
+        birthday:  $scope.helpForUpdate(employeeNumber) ? birthday : employee.birthday,
+        startWork:  $scope.helpForUpdate(employeeNumber) ? startWork : employee.startWork,
+        vacations: employee.vacations
       }).$update(function (employee) {
         $scope.employees.push(employee);
+        $scope.selectedEmployee = employee;
       });
+      $scope.clearModels();
     };
     
     $scope.deleteEmployee = function(employee) {
       employee.$remove(function() {
         $scope.employees.splice($scope.employees.indexOf(employee), 1);
       });
+    };
+
+    $scope.clearModels = function() {
+      $scope.employeeNumber = "";
+      $scope.name = "";
+      $scope.surname = "";
+      $scope.patronymic = "";
+      $scope.position = "";
+      $scope.login = "";
+      $scope.password = "";
+      $scope.birthday = "";
+      $scope.startWork = "";
+    };
+
+    $scope.helpForUpdate = function (param) {
+    return !(typeof param === "undefined" || param === null || param ===  "")
     };
   };
 

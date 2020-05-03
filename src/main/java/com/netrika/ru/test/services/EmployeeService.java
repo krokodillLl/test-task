@@ -6,6 +6,7 @@ import com.netrika.ru.test.repos.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -16,8 +17,8 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public List<Employee> getAllEmployees() {
-    return employeeRepository.findAll();
+    public List<EmployeeTO> getAllEmployees() {
+        return employeeRepository.findAll().stream().map(EmployeeTO::new).collect(Collectors.toList());
     }
 
     public EmployeeTO addEmployee(Employee employee) {
@@ -29,13 +30,13 @@ public class EmployeeService {
     }
 
     public EmployeeTO updateEmployee(Employee employee) {
-        if(employee.getLogin() == null || employee.getPassword() == null) {
+        if(employee.getLogin() == null || employee.getLogin().equals("") || employee.getPassword() == null || employee.getPassword().equals("")) {
             Employee employeeFromDB = employeeRepository.getOne(employee.getId());
 
-            if (employee.getLogin() == null) {
+            if (employee.getLogin() == null || employee.getLogin().equals("")) {
                 employee.setLogin(employeeFromDB.getLogin());
             }
-            if(employee.getPassword() == null) {
+            if(employee.getPassword() == null || employee.getPassword().equals("")) {
                 employee.setPassword(employeeFromDB.getPassword());
             }
         }

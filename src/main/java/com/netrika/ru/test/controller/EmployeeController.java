@@ -17,7 +17,7 @@ public class EmployeeController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Employee> getAllEmployees() {
+    public List<EmployeeTO> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 

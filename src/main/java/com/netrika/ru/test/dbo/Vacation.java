@@ -10,9 +10,9 @@ public class Vacation {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name="vacation_id")
-//    private Employee employee;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="vacation_id")
+    private Employee employee;
     private Date startVacation;
     private Date finishVacation;
 
@@ -22,7 +22,7 @@ public class Vacation {
     }
 
     public Vacation(Employee employee, Date startVacation, Date finishVacation) {
-//        this.employee = employee;
+        this.employee = employee;
         this.startVacation = startVacation;
         this.finishVacation = finishVacation;
     }
@@ -35,13 +35,13 @@ public class Vacation {
         this.id = id;
     }
 
-//    public Employee getEmployee() {
-//        return employee;
-//    }
+    public Employee getEmployee() {
+        return employee;
+    }
 
-//    public void setEmployee(Employee employee) {
-//        this.employee = employee;
-//    }
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
     public Date getStartVacation() {
         return startVacation;

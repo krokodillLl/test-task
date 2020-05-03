@@ -5,6 +5,7 @@ import com.netrika.ru.test.dbo.Vacation;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmployeeTO {
     private Long id;
@@ -15,7 +16,7 @@ public class EmployeeTO {
     private String position;
     private Date birthday;
     private Date startWork;
-    private List<Vacation> vacations;
+    private List<VacationEmployeeTO> vacations;
 
     public EmployeeTO(Employee employee) {
         this.id = employee.getId();
@@ -26,7 +27,7 @@ public class EmployeeTO {
         this.position = employee.getPosition();
         this.birthday = employee.getBirthday();
         this.startWork = employee.getStartWork();
-        this.vacations = employee.getVacations();
+        this.vacations = employee.getVacations().stream().map(VacationEmployeeTO::new).collect(Collectors.toList());
     }
 
     public EmployeeTO() {
@@ -96,11 +97,11 @@ public class EmployeeTO {
         this.startWork = startWork;
     }
 
-    public List<Vacation> getVacations() {
+    public List<VacationEmployeeTO> getVacations() {
         return vacations;
     }
 
-    public void setVacations(List<Vacation> vacations) {
+    public void setVacations(List<VacationEmployeeTO> vacations) {
         this.vacations = vacations;
     }
 }

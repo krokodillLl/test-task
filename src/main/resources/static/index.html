@@ -17,7 +17,7 @@
         Здесь пока нет ни одного сотрудкина
     </div>
     <ul>
-        <li ng-repeat="employee in employees">
+        <li ng-repeat="employee in employees | orderBy: 'employeeNumber'">
             <p>ФИО: {{employee.surname}} {{employee.name}} {{employee.patronymic}}
                 <button class="btn btn-default" ng-click="selectEmployee(employee)" data-toggle="modal" data-target=".edit-employee" title="Редактировать">
                     <span class="glyphicon glyphicon-pencil"></span>
@@ -109,10 +109,12 @@
                 </div>
                 <div class="modal-body">
                     <ul>
-                        <li ng-repeat="vacation in selectedEmployee.vacations">
-                            <p>{{$index + 1}}</p>
-                            <p>Дата начала отпуска: {{vacation.startVacation | date: 'dd-MM-yyyy'}}</p>
-                            <p>Дата окончания отпуска: {{vacation.finishVacation | date: 'dd-MM-yyyy'}}</p>
+                        <li ng-repeat="vacation in selectedEmployee.vacations | orderBy: '-finishVacation'">
+                            <p>№ {{$index + 1}}</p>
+                            <ul>
+                                <li><p>Дата начала отпуска: {{vacation.startVacation | date: 'dd-MM-yyyy'}}</p></li>
+                                <li><p>Дата окончания отпуска: {{vacation.finishVacation | date: 'dd-MM-yyyy'}}</p></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>

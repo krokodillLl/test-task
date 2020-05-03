@@ -31,14 +31,14 @@
       new Employee({
         id: employee.id,
         employeeNumber: $scope.helpForUpdate(employeeNumber) ? employeeNumber : employee.employeeNumber,
-        name:  $scope.helpForUpdate(employeeNumber) ? name : employee.name,
-        surname:  $scope.helpForUpdate(employeeNumber) ? surname : employee.surname,
-        patronymic:  $scope.helpForUpdate(employeeNumber) ? patronymic : employee.patronymic,
-        position:  $scope.helpForUpdate(employeeNumber) ? position : employee.position,
+        name:  $scope.helpForUpdate(name) ? name : employee.name,
+        surname:  $scope.helpForUpdate(surname) ? surname : employee.surname,
+        patronymic:  $scope.helpForUpdate(patronymic) ? patronymic : employee.patronymic,
+        position:  $scope.helpForUpdate(position) ? position : employee.position,
         login: login,
         password: password,
-        birthday:  $scope.helpForUpdate(employeeNumber) ? birthday : employee.birthday,
-        startWork:  $scope.helpForUpdate(employeeNumber) ? startWork : employee.startWork,
+        birthday:  $scope.helpForUpdate(birthday) ? birthday : employee.birthday,
+        startWork:  $scope.helpForUpdate(startWork) ? startWork : employee.startWork,
         vacations: employee.vacations
       }).$update(function (employee) {
         $scope.employees.push(employee);

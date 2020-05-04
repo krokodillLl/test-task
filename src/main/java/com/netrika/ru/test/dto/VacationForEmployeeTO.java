@@ -4,15 +4,15 @@ import com.netrika.ru.test.dbo.Vacation;
 
 import java.util.Date;
 
-public class VacationEmployeeTO {
+public class VacationForEmployeeTO {
 
     private Long id;
     private Date startVacation;
     private Date finishVacation;
 
-    public VacationEmployeeTO() {
+    public VacationForEmployeeTO() {
     }
-    public VacationEmployeeTO(Vacation vacation) {
+    public VacationForEmployeeTO(Vacation vacation) {
         this.id = vacation.getId();
         this.startVacation = vacation.getStartVacation();
         this.finishVacation = vacation.getFinishVacation();

@@ -3,10 +3,9 @@ package com.netrika.ru.test.dto;
 import com.netrika.ru.test.dbo.Employee;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class EmployeeTO {
+public class EmployeeForVacationTO {
+
     private Long id;
     private Long employeeNumber;
     private String name;
@@ -15,9 +14,10 @@ public class EmployeeTO {
     private String position;
     private Date birthday;
     private Date startWork;
-    private List<VacationForEmployeeTO> vacations;
 
-    public EmployeeTO(Employee employee) {
+    public EmployeeForVacationTO() {
+    }
+    public EmployeeForVacationTO(Employee employee) {
         this.id = employee.getId();
         this.employeeNumber = employee.getEmployeeNumber();
         this.name = employee.getName();
@@ -26,11 +26,6 @@ public class EmployeeTO {
         this.position = employee.getPosition();
         this.birthday = employee.getBirthday();
         this.startWork = employee.getStartWork();
-        if(employee.getVacations() != null)
-        this.vacations = employee.getVacations().stream().map(VacationForEmployeeTO::new).collect(Collectors.toList());
-    }
-
-    public EmployeeTO() {
     }
 
     public Long getId() {
@@ -95,13 +90,5 @@ public class EmployeeTO {
 
     public void setStartWork(Date startWork) {
         this.startWork = startWork;
-    }
-
-    public List<VacationForEmployeeTO> getVacations() {
-        return vacations;
-    }
-
-    public void setVacations(List<VacationForEmployeeTO> vacations) {
-        this.vacations = vacations;
     }
 }

@@ -21,6 +21,13 @@ public class EmployeeService {
         return employeeRepository.findAll().stream().map(EmployeeTO::new).collect(Collectors.toList());
     }
 
+    public EmployeeTO getOneEmployee(Long id) {
+        return new EmployeeTO(employeeRepository.getOne(id));
+    }
+    public Employee findEmployeeById(Long id) {
+        return employeeRepository.getOne(id);
+    }
+
     public EmployeeTO addEmployee(Employee employee) {
         if(employeeRepository.findByEmployeeNumber(employee.getEmployeeNumber()) != null) {
             return null;

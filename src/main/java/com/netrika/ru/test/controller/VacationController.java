@@ -1,6 +1,7 @@
 package com.netrika.ru.test.controller;
 
 import com.netrika.ru.test.dbo.Vacation;
+import com.netrika.ru.test.dto.VacationTO;
 import com.netrika.ru.test.services.VacationService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,19 +18,19 @@ public class VacationController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Vacation> getAllVacations() {
+    public List<VacationTO> getAllVacations() {
         return vacationService.getAllVacations();
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Boolean addVacation(@RequestBody Vacation vacation) {
+    public VacationTO addVacation(@RequestBody Vacation vacation) {
         return vacationService.addVacation(vacation);
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
-    public void updateVacation(@RequestBody Vacation vacation, @PathVariable Long id) {
+    public VacationTO updateVacation(@RequestBody Vacation vacation, @PathVariable Long id) {
         vacation.setId(id);
-        vacationService.updateVacation(vacation);
+        return vacationService.updateVacation(vacation);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)

@@ -80,7 +80,7 @@
                         <div class="modal-body">
                             <form class="form-horizontal" role="form" ng-submit="addEmployee(employeeNumber, name, surname, patronymic, position, login, password, birthday, startWork)">
                                 <div class="input-group">
-                                    <p ng-hide="!invalidEmployeeNumber">{{invalidEmployeeNumber}}</p>
+                                    <p ng-hide="!invalidEmployeeNumber" style="color: red">{{invalidEmployeeNumber}}</p>
                                     <input type="number" class="form-control" ng-model="employeeNumber" placeholder="Введите id сотрудника" />
                                     <input type="text" class="form-control" ng-model="name" placeholder="Введите имя сотрудника" />
                                     <input type="text" class="form-control" ng-model="surname" placeholder="Введите фамилию сотрудника" />
@@ -135,8 +135,15 @@
             <div class="alert alert-info" role="alert" ng-hide="vacations &amp;&amp; vacations.length > 0">
                 Здесь пока нет ни одного отпуска
             </div>
+            <h4>Фильтры</h4>
+            <div style="display:inline-block">
+                id сотрудника: <input type="number" ng-model="empNumber" ng-change="vacationsFilter()" />
+                Дата с: <input type="date" ng-model="dateStart" ng-change="vacationsFilter()" placeholder="фильтр по id сотрудника" />
+                Дата по: <input type="date" ng-model="dateFinish" ng-change="vacationsFilter()" placeholder="фильтр по id сотрудника" />
+            </div>
+            <hr />
             <ul>
-                <li ng-repeat="vacation in vacations | orderBy: '-finishVacation'">
+                <li ng-repeat="vacation in displayedVacations | orderBy: 'employee.employeeNumber'">
                     <p>ФИО сотрудника: {{vacation.employee.surname}} {{vacation.employee.name}} {{vacation.employee.patronymic}}
                         <button class="btn btn-default" ng-click="selectVacation(vacation)" data-toggle="modal" data-target=".edit-vacation" title="Редактировать">
                             <span class="glyphicon glyphicon-pencil"></span>
@@ -159,7 +166,7 @@
                         <div class="modal-body">
                             <form class="form-horizontal" role="form" ng-submit="addVacation(employeeNumber, startVacation, finishVacation)">
                                 <div class="input-group">
-                                    <p ng-hide="!invalidEmployeeNumber">{{invalidEmployeeNumber}}</p>
+                                    <p ng-hide="!invalidEmployeeNumber" style="color: red">{{invalidEmployeeNumber}}</p>
                                     <input type="number" class="form-control" ng-model="employeeNumber" placeholder="Введите id сотрудника" />
                                     <p>Введите дату начала отпуска</p>
                                     <input type="date" class="form-control" ng-model="startVacation" />

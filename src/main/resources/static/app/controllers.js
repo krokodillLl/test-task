@@ -89,7 +89,43 @@
   var VacationController = function($scope, $rootScope, Vacation) {
     Vacation.query(function(response) {
       $scope.vacations = response ? response : [];
+      $scope.displayedVacations = $scope.vacations;
     });
+
+    $scope.empNumber = "";
+    $scope.dateStart = "";
+    $scope.dateFinish = "";
+
+    $scope.vacationsFilter = function () {
+      $scope.displayedVacations = $scope.vacations;
+      if($scope.helpForUpdate($scope.empNumber)) {
+        var empNumberVacations = [];
+        for(var i = 0; i < $scope.displayedVacations.length; i++) {
+          if($scope.displayedVacations[i].employee.employeeNumber === $scope.empNumber) {
+            empNumberVacations.push($scope.displayedVacations[i]);
+          }
+        }
+        $scope.displayedVacations = empNumberVacations;
+      }
+      if($scope.helpForUpdate($scope.dateStart)) {
+        var dateStartVacations = [];
+        for(var ii = 0; ii < $scope.displayedVacations.length; ii++) {
+          if(new Date($scope.displayedVacations[ii].startVacation) >= $scope.dateStart) {
+            dateStartVacations.push($scope.displayedVacations[ii]);
+          }
+        }
+        $scope.displayedVacations = dateStartVacations;
+      }
+      if($scope.helpForUpdate($scope.dateFinish)) {
+        var dateFinishVacations = [];
+        for(var iii = 0; iii < $scope.displayedVacations.length; iii++) {
+          if(new Date($scope.displayedVacations[iii].finishVacation) <= $scope.dateFinish) {
+            dateFinishVacations.push($scope.displayedVacations[iii]);
+          }
+        }
+        $scope.displayedVacations = dateFinishVacations;
+      }
+    };
 
     $scope.selectVacation = function(vacation) {
       $scope.selectedVacation = vacation;
@@ -115,6 +151,7 @@
         employee: employee
       }).$add(function(vacation) {
         $scope.vacations.push(vacation);
+        $scope.vacationsFilter();
       });
       $scope.clearModels();
     };
@@ -136,6 +173,7 @@
       }).$update(function (vacation) {
         $scope.vacations.push(vacation);
         $scope.selectedVacation = vacation;
+        $scope.vacationsFilter();
       });
       $scope.clearModels();
     };
@@ -143,6 +181,7 @@
     $scope.deleteVacation = function(vacation) {
       vacation.$remove(function() {
         $scope.vacations.splice($scope.vacations.indexOf(vacation), 1);
+        $scope.vacationsFilter();
       });
     };
 

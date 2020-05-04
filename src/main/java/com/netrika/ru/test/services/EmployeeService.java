@@ -29,9 +29,6 @@ public class EmployeeService {
     }
 
     public EmployeeTO addEmployee(Employee employee) {
-        if(employeeRepository.findByEmployeeNumber(employee.getEmployeeNumber()) != null) {
-            return null;
-        }
         employeeRepository.saveAndFlush(employee);
         return new EmployeeTO(employee);
     }

@@ -135,15 +135,27 @@
             <div class="alert alert-info" role="alert" ng-hide="vacations &amp;&amp; vacations.length > 0">
                 Здесь пока нет ни одного отпуска
             </div>
-            <h4>Фильтры</h4>
-            <div style="display:inline-block">
-                id сотрудника: <input type="number" ng-model="empNumber" ng-change="vacationsFilter()" />
-                Дата с: <input type="date" ng-model="dateStart" ng-change="vacationsFilter()" placeholder="фильтр по id сотрудника" />
-                Дата по: <input type="date" ng-model="dateFinish" ng-change="vacationsFilter()" placeholder="фильтр по id сотрудника" />
+            <div class="container-fluid">
+                <div class="row">
+                    <p class="col-md-6">
+                        <input type="number" ng-model="empNumber" ng-change="vacationsFilter()" placeholder="id сотрудника:"/>
+                    </p>
+                    <p class="col-md-6">Дата с: <input type="date" ng-model="dateStart" ng-change="vacationsFilter()" /></p>
+                    <div class="col-md-6">
+                        <select ng-change="vacationSort()" ng-model="vacationSortParam" >
+                            <option value="">Выберите тип сортировки</option>
+                            <option value="1">По id &#8595;</option> <!--убывание-->
+                            <option value="2">По id &#8593;</option>
+                            <option value="3">По дате &#8595;</option> <!--убывание-->
+                            <option value="4">По дате &#8593;</option>
+                        </select>
+                    </div>
+                    <p class="col-md-6">Дата по: <input type="date"  ng-model="dateFinish" ng-change="vacationsFilter()" /></p>
+                </div>
             </div>
             <hr />
             <ul>
-                <li ng-repeat="vacation in displayedVacations | orderBy: 'employee.employeeNumber'">
+                <li ng-repeat="vacation in displayedVacations">
                     <p>ФИО сотрудника: {{vacation.employee.surname}} {{vacation.employee.name}} {{vacation.employee.patronymic}}
                         <button class="btn btn-default" ng-click="selectVacation(vacation)" data-toggle="modal" data-target=".edit-vacation" title="Редактировать">
                             <span class="glyphicon glyphicon-pencil"></span>

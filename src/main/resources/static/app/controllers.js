@@ -95,9 +95,10 @@
     $scope.empNumber = "";
     $scope.dateStart = "";
     $scope.dateFinish = "";
+    $scope.vacationSortParam = "";
 
     $scope.vacationsFilter = function () {
-      $scope.displayedVacations = $scope.vacations;
+      $scope.displayedVacations = $scope.vacations.slice();
       if($scope.helpForUpdate($scope.empNumber)) {
         var empNumberVacations = [];
         for(var i = 0; i < $scope.displayedVacations.length; i++) {
@@ -125,7 +126,23 @@
         }
         $scope.displayedVacations = dateFinishVacations;
       }
+      $scope.vacationSort();
     };
+
+    $scope.vacationSort = function() {
+      if($scope.vacationSortParam === '1') { //по уменьшению id
+        $scope.sortById(true);
+      }
+      if($scope.vacationSortParam === '2') { //по увеличению id
+        $scope.sortById(false);
+      }
+      if($scope.vacationSortParam === '3') { //по уменьшению даты
+        $scope.sortByDate(false);
+      }
+      if($scope.vacationSortParam === '4') { //по увеличению даты
+        $scope.sortByDate(true);
+      }
+    }
 
     $scope.selectVacation = function(vacation) {
       $scope.selectedVacation = vacation;
@@ -195,6 +212,59 @@
     $scope.helpForUpdate = function (param) {
       return !(typeof param === "undefined" || param === null || param ===  "")
     };
+
+    $scope.sortById = function (reverse) {
+      var originalArray = $scope.displayedVacations.slice();
+      var numberOfIterations = $scope.displayedVacations.length;
+      $scope.displayedVacations = [];
+      var indexInArray, minNumber;
+      for(var i = 0; i < numberOfIterations; i++) {
+        for(var ii = 0; ii < originalArray.length; ii++) {
+          if(ii === 0) {
+            minNumber = originalArray[ii].employee.employeeNumber;
+            indexInArray = ii;
+          }
+          else {
+            if(originalArray[ii].employee.employeeNumber < minNumber) {
+              minNumber = originalArray[ii].employee.employeeNumber;
+              indexInArray = ii;
+            }
+          }
+        }
+        $scope.displayedVacations.push(originalArray[indexInArray]);
+        originalArray.splice(indexInArray, 1);
+      }
+      if(reverse === true) {
+        $scope.displayedVacations.reverse();
+      }
+    }
+
+    $scope.sortByDate = function (reverse) {
+      var originalArray = $scope.displayedVacations.slice();
+      var numberOfIterations = $scope.displayedVacations.length;
+      $scope.displayedVacations = [];
+      var indexInArray, maxDate;
+      for(var i = 0; i < numberOfIterations; i++) {
+        for(var ii = 0; ii < originalArray.length; ii++) {
+          if(ii === 0) {
+            maxDate = new Date(originalArray[ii].finishVacation);
+            indexInArray = ii;
+          }
+          else {
+            if(new Date(originalArray[ii].finishVacation) > maxDate) {
+              maxDate = new Date(originalArray[ii].finishVacation);
+              indexInArray = ii;
+            }
+          }
+        }
+        $scope.displayedVacations.push(originalArray[indexInArray]);
+        originalArray.splice(indexInArray, 1);
+      }
+      if(reverse === true) {
+        $scope.displayedVacations.reverse();
+      }
+    }
+
   };
 
   VacationController.$inject = ['$scope', '$rootScope', 'Vacation'];

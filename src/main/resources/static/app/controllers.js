@@ -1,9 +1,15 @@
 (function(angular) {
-  var EmployeeController = function($scope, $rootScope, Employee) {
+  var EmployeeController = function($scope, $rootScope, Employee, Report) {
     Employee.query(function(response) {
       $scope.employees = response ? response : [];
       $rootScope.employees = $scope.employees;
     });
+
+    $scope.getReport = function() {
+      Report.query(function (pdf) {
+      console.log(pdf);
+      });
+    };
 
     $scope.selectEmployee = function(employee) {
       employee.$getOne(function(employee) {
@@ -15,7 +21,7 @@
     $scope.addEmployee = function(employeeNumber, name, surname, patronymic, position, login, password, birthday, startWork) {
       for(var i = 0; i < $scope.employees.length; i++) {
         if($scope.employees[i].employeeNumber === employeeNumber) {
-          $scope.invalidEmployeeNumber = "Введенный Вами id уже используется. Пожалуйста, проверьте введенные данные";
+          $scope.invalidParameter = "Введенный Вами id уже используется. Пожалуйста, проверьте введенные данные";
           return;
         }
       }
@@ -75,7 +81,7 @@
       $scope.password = "";
       $scope.birthday = "";
       $scope.startWork = "";
-      $scope.invalidEmployeeNumber = "";
+      $scope.invalidParameter = "";
     };
 
     $scope.helpForUpdate = function (param) {
@@ -83,7 +89,7 @@
     };
   };
 
-  EmployeeController.$inject = ['$scope', '$rootScope', 'Employee'];
+  EmployeeController.$inject = ['$scope', '$rootScope', 'Employee', 'Report'];
   angular.module("test-data-drivers.controllers").controller("EmployeeController", EmployeeController);
 
   var VacationController = function($scope, $rootScope, Vacation) {
@@ -158,9 +164,15 @@
         }
       }
       if(!$scope.helpForUpdate(employee)) {
-        $scope.invalidEmployeeNumber = "Введенный Вами id сотрудника еще не зарегистрирован. Пожалуйста, проверьте введенные данные";
+        $scope.invalidParameter = "Введенный Вами id сотрудника еще не зарегистрирован. Пожалуйста, проверьте введенные данные";
         return;
       }
+
+      if((finishVacation - startVacation) <= 0) {
+        $scope.invalidParameter = "Пожалуйста, проверьте правильность введенных дат отпуска.";
+        return;
+      }
+
       new Vacation({
         employeeNumber: employeeNumber,
         startVacation: startVacation,
@@ -180,12 +192,18 @@
           break;
         }
       }
+      var start =  $scope.helpForUpdate(startVacation) ? startVacation : new Date(vacation.startVacation);
+      var finish = $scope.helpForUpdate(finishVacation) ? finishVacation : new Date(vacation.finishVacation);
+      if((finish - start) <= 0) {
+        $scope.invalidParameter = "Пожалуйста, проверьте правильность введенных дат отпуска.";
+        return;
+      }
       $scope.vacations.splice($scope.vacations.indexOf(vacation), 1);
       new Vacation({
         id: vacation.id,
         employeeNumber: vacation.employee.employeeNumber,
-        startVacation: $scope.helpForUpdate(startVacation) ? startVacation : vacation.startVacation,
-        finishVacation: $scope.helpForUpdate(finishVacation) ? finishVacation : vacation.finishVacation,
+        startVacation: start,
+        finishVacation: finish,
         employee: employee
       }).$update(function (vacation) {
         $scope.vacations.push(vacation);
@@ -206,7 +224,7 @@
       $scope.startVacation = "";
       $scope.finishVacation = "";
       $scope.employeeNumber = "";
-      $scope.invalidEmployeeNumber = "";
+      $scope.invalidParameter = "";
     };
 
     $scope.helpForUpdate = function (param) {

@@ -1,7 +1,12 @@
 package com.netrika.ru.test.dto;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.netrika.ru.test.dbo.Employee;
+import com.netrika.ru.test.utils.VacationForEmployeeTOConverter;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -103,5 +108,15 @@ public class EmployeeTO {
 
     public void setVacations(List<VacationForEmployeeTO> vacations) {
         this.vacations = vacations;
+    }
+
+    public String getJsonVacations() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setPrettyPrinting();
+        gsonBuilder.registerTypeAdapter(VacationForEmployeeTO.class, new VacationForEmployeeTOConverter());
+        Gson gson = gsonBuilder.create();
+        getVacations().sort(Comparator.comparing(VacationForEmployeeTO::getFinishVacation));
+        Collections.reverse(getVacations());
+        return gson.toJson(getVacations());
     }
 }

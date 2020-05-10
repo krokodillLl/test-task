@@ -18,7 +18,7 @@ public class EmployeeController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public EmployeeTO getAllEmployees(@PathVariable Long id) {
-        return employeeService.getOneEmployee(id);
+            return employeeService.getOneEmployee(id);
     }
     @RequestMapping(method = RequestMethod.GET)
     public List<EmployeeTO> getAllEmployees() {

@@ -57,4 +57,11 @@
 
   VacationFactory.$inject = ['$resource'];
   angular.module("test-data-drivers.services").factory("Vacation", VacationFactory);
+
+  var ReportFactory = function($resource) {
+    return $resource('/report');
+  };
+
+  ReportFactory.$inject = ['$resource'];
+  angular.module("test-data-drivers.services").factory("Report", ReportFactory);
 }(angular));

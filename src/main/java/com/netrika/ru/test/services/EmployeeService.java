@@ -22,6 +22,7 @@ public class EmployeeService {
     }
 
     public EmployeeTO getOneEmployee(Long id) {
+
         return new EmployeeTO(employeeRepository.getOne(id));
     }
     public Employee findEmployeeById(Long id) {

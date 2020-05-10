@@ -18,6 +18,9 @@
             <div class="alert alert-info" role="alert" ng-hide="employees &amp;&amp; employees.length > 0">
                 Здесь пока нет ни одного сотрудкина
             </div>
+            <button class="btn btn-default" ng-click="getReport()" title="Скачать отчет в PDF">
+                <span class="glyphicon glyphicon-download"></span>
+            </button>
             <ul>
                 <li ng-repeat="employee in employees | orderBy: 'employeeNumber'">
                     <p>ФИО: {{employee.surname}} {{employee.name}} {{employee.patronymic}}
@@ -80,7 +83,7 @@
                         <div class="modal-body">
                             <form class="form-horizontal" role="form" ng-submit="addEmployee(employeeNumber, name, surname, patronymic, position, login, password, birthday, startWork)">
                                 <div class="input-group">
-                                    <p ng-hide="!invalidEmployeeNumber" style="color: red">{{invalidEmployeeNumber}}</p>
+                                    <p ng-hide="!invalidParameter" style="color: red">{{invalidParameter}}</p>
                                     <input type="number" class="form-control" ng-model="employeeNumber" placeholder="Введите id сотрудника" />
                                     <input type="text" class="form-control" ng-model="name" placeholder="Введите имя сотрудника" />
                                     <input type="text" class="form-control" ng-model="surname" placeholder="Введите фамилию сотрудника" />
@@ -178,11 +181,12 @@
                         <div class="modal-body">
                             <form class="form-horizontal" role="form" ng-submit="addVacation(employeeNumber, startVacation, finishVacation)">
                                 <div class="input-group">
-                                    <p ng-hide="!invalidEmployeeNumber" style="color: red">{{invalidEmployeeNumber}}</p>
+                                    <p ng-hide="!invalidParameter" style="color: red">{{invalidParameter}}</p>
                                     <input type="number" class="form-control" ng-model="employeeNumber" placeholder="Введите id сотрудника" />
                                     <p>Введите дату начала отпуска</p>
                                     <input type="date" class="form-control" ng-model="startVacation" />
                                     <p>Введите дату окончания отпуска</p>
+                                    <p ng-hide="!invalidParameter" style="color: red">{{invalidParameter}}</p>
                                     <input type="date" class="form-control" ng-model="finishVacation" />
                                     <span class="input-group-btn">
                     <button class="btn btn-default" type="submit" ng-disabled="!employeeNumber||!startVacation||!finishVacation" title="Добавить">
@@ -207,6 +211,7 @@
                                 <p>Дата начала отпуска: {{selectedVacation.startVacation | date: 'dd-MM-yyyy'}}</p>
                                 <input type="date" class="form-control" ng-model="startVacation" />
                                 <p>Дата окончания отпуска: {{selectedVacation.finishVacation | date: 'dd-MM-yyyy'}}</p>
+                                <p ng-hide="!invalidParameter" style="color: red">{{invalidParameter}}</p>
                                 <input type="date" class="form-control" ng-model="finishVacation" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="updateVacation(startVacation, finishVacation, selectedVacation)" title="Сохранить изменения">

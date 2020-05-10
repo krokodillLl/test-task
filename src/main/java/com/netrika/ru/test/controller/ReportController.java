@@ -1,17 +1,22 @@
 package com.netrika.ru.test.controller;
 
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.netrika.ru.test.services.ReportService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import java.io.FileNotFoundException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/report")
 public class ReportController {
+
+    private final Logger logger = LoggerFactory.getLogger(ReportController.class);
 
     private final ReportService reportService;
 
@@ -20,12 +25,12 @@ public class ReportController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Document getPDF() {
+    StreamingResponseBody getPDF(HttpServletResponse response){
         try {
-             reportService.getPDF();
-        } catch (FileNotFoundException | DocumentException e) {
-            e.printStackTrace();
+            return reportService.getPDF(response);
+        } catch (IOException | DocumentException e) {
+            logger.error("The report file cannot be created");
+            return null;
         }
-        return null;
     }
 }

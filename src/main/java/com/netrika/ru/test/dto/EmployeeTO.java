@@ -5,10 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.netrika.ru.test.dbo.Employee;
 import com.netrika.ru.test.utils.VacationForEmployeeTOConverter;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EmployeeTO {
@@ -31,8 +28,13 @@ public class EmployeeTO {
         this.position = employee.getPosition();
         this.birthday = employee.getBirthday();
         this.startWork = employee.getStartWork();
-        if(employee.getVacations() != null)
-        this.vacations = employee.getVacations().stream().map(VacationForEmployeeTO::new).collect(Collectors.toList());
+        if(employee.getVacations() != null) {
+            this.vacations = employee.getVacations().stream().map(VacationForEmployeeTO::new).collect(Collectors.toList());
+        }
+        else {
+            this.vacations = new ArrayList<>();
+        }
+
     }
 
     public EmployeeTO() {

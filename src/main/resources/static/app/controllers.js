@@ -1,22 +1,15 @@
 (function(angular) {
-  var EmployeeController = function($scope, $rootScope, Employee, Report) {
+  var EmployeeController = function($scope, $rootScope, Employee) {
     Employee.query(function(response) {
       $scope.employees = response ? response : [];
       $rootScope.employees = $scope.employees;
     });
-
-    $scope.getReport = function() {
-      Report.query(function (pdf) {
-      console.log(pdf);
-      });
-    };
 
     $scope.selectEmployee = function(employee) {
       employee.$getOne(function(employee) {
         $scope.selectedEmployee = employee;
       });
     };
-
 
     $scope.addEmployee = function(employeeNumber, name, surname, patronymic, position, login, password, birthday, startWork) {
       for(var i = 0; i < $scope.employees.length; i++) {
@@ -89,7 +82,7 @@
     };
   };
 
-  EmployeeController.$inject = ['$scope', '$rootScope', 'Employee', 'Report'];
+  EmployeeController.$inject = ['$scope', '$rootScope', 'Employee'];
   angular.module("test-data-drivers.controllers").controller("EmployeeController", EmployeeController);
 
   var VacationController = function($scope, $rootScope, Vacation) {

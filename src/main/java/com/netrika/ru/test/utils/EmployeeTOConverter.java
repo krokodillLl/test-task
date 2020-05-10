@@ -8,6 +8,7 @@ import com.netrika.ru.test.dto.EmployeeTO;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 public class EmployeeTOConverter implements JsonSerializer<EmployeeTO> {
     @Override
@@ -17,7 +18,7 @@ public class EmployeeTOConverter implements JsonSerializer<EmployeeTO> {
         object.addProperty("id сотрудника", employeeTO.getEmployeeNumber().toString());
         object.addProperty("Должность", employeeTO.getPosition());
         object.addProperty("Дата начала работы", new SimpleDateFormat("yyyy-MM-dd").format(employeeTO.getStartWork()));
-        if(!employeeTO.getJsonVacations().equals("[]")) {
+        if(!Objects.equals(employeeTO.getJsonVacations(), "[]")) {
             object.addProperty("Список отпусков", employeeTO.getJsonVacations());
         }
         return object;

@@ -7,23 +7,26 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.netrika.ru.test.dto.EmployeeTO;
 import com.netrika.ru.test.utils.EmployeeTOConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 @Service
 public class ReportService {
 
+    private final Logger logger = LoggerFactory.getLogger(ReportService.class);
     private final EmployeeService employeeService;
     public ReportService(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
-    public Document getPDF() throws FileNotFoundException, DocumentException {
+    public StreamingResponseBody getPDF(HttpServletResponse response) throws IOException, DocumentException {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setPrettyPrinting();
         gsonBuilder.registerTypeAdapter(EmployeeTO.class, new EmployeeTOConverter());
@@ -31,15 +34,11 @@ public class ReportService {
         String json = gson.toJson(employeeService.getAllEmployees());
         String[] strings = json.split("\n");
         Document pdfDoc = new Document(PageSize.A4);
-        PdfWriter.getInstance(pdfDoc, new FileOutputStream("myJSON.pdf"))
+        PdfWriter.getInstance(pdfDoc, new FileOutputStream("Report.pdf"))
                 .setPdfVersion(PdfWriter.PDF_VERSION_1_7);
         pdfDoc.open();
         BaseFont font = null;
-        try {
-            font = BaseFont.createFont("c:/Windows/Fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            font = BaseFont.createFont("fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         Font myFont = new Font(font);
         myFont.setStyle(Font.NORMAL);
         myFont.setSize(11);
@@ -56,7 +55,25 @@ public class ReportService {
             }
         }
         pdfDoc.close();
-        return pdfDoc;
+
+        response.setContentType("text/html;charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=\"Report.pdf\"");
+        InputStream inputStream = new FileInputStream(new File("Report.pdf"));
+
+        return outputStream -> {
+            int nRead;
+            byte[] data = new byte[1024];
+            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+                outputStream.write(data, 0, nRead);
+            }
+            inputStream.close();
+            if(new File("Report.pdf").delete()) {
+                logger.info("The temp file \"Report.pdf\" was deleted");
+            }
+            else {
+                logger.info("The temp file wasn't deleted");
+            }
+        };
     }
 
     private Boolean isUglyText(String uglyText) {
@@ -76,7 +93,7 @@ public class ReportService {
         return new ArrayList<>(Arrays.asList(texts));
     }
 
-    private void writePDF(String string, Font myFont, Document pdfDoc) {
+    private void writePDF(String string, Font myFont, Document pdfDoc) throws DocumentException {
         if(!string.equals("")) {
             ArrayList<String> list = getPrettyText(string);
             for(String current: list) {
@@ -88,11 +105,7 @@ public class ReportService {
                 }
                 Paragraph para = new Paragraph(current + "\n", myFont);
                 para.setAlignment(Element.ALIGN_JUSTIFIED);
-                try {
                     pdfDoc.add(para);
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

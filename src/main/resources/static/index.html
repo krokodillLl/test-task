@@ -18,9 +18,13 @@
             <div class="alert alert-info" role="alert" ng-hide="employees &amp;&amp; employees.length > 0">
                 Здесь пока нет ни одного сотрудкина
             </div>
-            <button class="btn btn-default" ng-click="getReport()" title="Скачать отчет в PDF">
-                <span class="glyphicon glyphicon-download"></span>
-            </button>
+            <form method="get" action="/report" ng-show="employees &amp;&amp; employees.length > 0">
+                <p>Скачать отчет в формате PDF</p>
+                <button id="getPDF" type="submit" class="btn btn-default" title="Скачать отчет в PDF">
+                    <span class="glyphicon glyphicon-download-alt"></span>
+                </button>
+            </form>
+            <hr />
             <ul>
                 <li ng-repeat="employee in employees | orderBy: 'employeeNumber'">
                     <p>ФИО: {{employee.surname}} {{employee.name}} {{employee.patronymic}}

@@ -3,6 +3,7 @@ package com.netrika.ru.test.controller;
 import com.netrika.ru.test.dbo.Vacation;
 import com.netrika.ru.test.dto.VacationTO;
 import com.netrika.ru.test.services.VacationService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,27 +14,27 @@ public class VacationController {
 
     private final VacationService vacationService;
 
-    public VacationController(VacationService vacationService) {
+    public VacationController(@Qualifier("vacationService") VacationService vacationService) {
         this.vacationService = vacationService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping()
     public List<VacationTO> getAllVacations() {
         return vacationService.getAllVacations();
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping(value = "/add")
     public VacationTO addVacation(@RequestBody Vacation vacation) {
         return vacationService.addVacation(vacation);
     }
 
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
+    @PutMapping(value = "/update/{id}")
     public VacationTO updateVacation(@RequestBody Vacation vacation, @PathVariable Long id) {
         vacation.setId(id);
         return vacationService.updateVacation(vacation);
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/delete/{id}")
     public void deleteVacation(@PathVariable Long id) {
         vacationService.deleteVacation(id);
     }

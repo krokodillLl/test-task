@@ -3,6 +3,7 @@ package com.netrika.ru.test.controller;
 import com.netrika.ru.test.dbo.Employee;
 import com.netrika.ru.test.dto.EmployeeTO;
 import com.netrika.ru.test.services.EmployeeService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,33 +11,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
+
     private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(@Qualifier("employeeService") EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public EmployeeTO getAllEmployees(@PathVariable Long id) {
-            return employeeService.getOneEmployee(id);
-    }
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping()
     public List<EmployeeTO> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @GetMapping(value = "/{id}")
+    public EmployeeTO getAllEmployees(@PathVariable Long id) {
+        return employeeService.getOneEmployee(id);
+    }
+
+    @PostMapping(value = "/add")
     public EmployeeTO addEmployee(@RequestBody Employee employee) {
         return employeeService.addEmployee(employee);
     }
 
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
+    @PutMapping(value = "/update/{id}")
     public EmployeeTO updateEmployee(@RequestBody Employee employee, @PathVariable Long id) {
         employee.setId(id);
         return employeeService.updateEmployee(employee);
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/delete/{id}")
     public void deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
     }

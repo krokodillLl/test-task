@@ -4,6 +4,7 @@ import com.netrika.ru.test.dbo.Employee;
 import com.netrika.ru.test.dbo.Vacation;
 import com.netrika.ru.test.dto.VacationTO;
 import com.netrika.ru.test.repos.VacationRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,8 @@ public class VacationService {
     private final VacationRepository vacationRepository;
     private final EmployeeService employeeService;
 
-    public VacationService(VacationRepository vacationRepository, EmployeeService employeeService) {
+    public VacationService(@Qualifier("vacationRepository") VacationRepository vacationRepository,
+                           @Qualifier("employeeService") EmployeeService employeeService) {
         this.vacationRepository = vacationRepository;
         this.employeeService = employeeService;
     }

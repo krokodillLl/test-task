@@ -9,6 +9,7 @@ import com.netrika.ru.test.dto.EmployeeTO;
 import com.netrika.ru.test.utils.EmployeeTOConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -22,7 +23,7 @@ public class ReportService {
 
     private final Logger logger = LoggerFactory.getLogger(ReportService.class);
     private final EmployeeService employeeService;
-    public ReportService(EmployeeService employeeService) {
+    public ReportService(@Qualifier("employeeService") EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 

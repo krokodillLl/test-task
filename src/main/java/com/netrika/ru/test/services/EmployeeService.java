@@ -3,6 +3,7 @@ package com.netrika.ru.test.services;
 import com.netrika.ru.test.dbo.Employee;
 import com.netrika.ru.test.dto.EmployeeTO;
 import com.netrika.ru.test.repos.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(@Qualifier("employeeRepository") EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
